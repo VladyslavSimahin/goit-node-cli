@@ -1,12 +1,12 @@
-import * as fs from "node:fs/promises";
-import path from "node:path";
-import { v4 as uuidv4 } from "uuid";
+const fs = require("fs/promises");
+const path = require("path");
+const { nanoid } = require("nanoid");
 
-const contactsPath = path.resolve("contacts", "contacts.json");
+const contactsPath = path.join(__dirname, "/contacts.json");
 
 async function listContacts() {
   // ...твій код. Повертає масив контактів.
-  const data = await fs.readFile(contactsPath, { encoding: "utf-8" });
+  const data = await fs.readFile(`${contactsPath}`, { encoding: "utf-8" });
   return JSON.parse(data);
 }
 function writeContacts(contacts) {
@@ -41,7 +41,7 @@ async function addContact(name, email, phone) {
   const contact = await listContacts();
   const newContact = {
     ...contact,
-    id: uuidv4(),
+    id: nanoid(),
     name,
     email,
     phone,
@@ -53,8 +53,7 @@ async function addContact(name, email, phone) {
 
   return newContact;
 }
-
-export default {
+module.exports = {
   listContacts,
   writeContacts,
   getContactById,

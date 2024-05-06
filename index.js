@@ -1,5 +1,6 @@
-import { program } from "commander";
-import Contacts from "./contacts.js";
+const { program } = require("commander");
+
+const contacts = require("./contacts");
 
 program
   .option("-a, --action <type>", "choose action")
@@ -16,26 +17,25 @@ const options = program.opts();
 async function invokeAction({ action, id, name, email, phone }) {
   switch (action) {
     case "list":
-      const contacts = await Contacts.listContacts();
+      const contactList = await contacts.listContacts();
 
-      return contacts;
+      return console.table(contactList);
 
     case "get":
-      const contact = await Contacts.getContactById(id);
-      return contact;
+      const oneContact = await contacts.getContactById(id);
+      return console.table(oneContact);
 
     case "add":
-      const createContact = await Contacts.addContact({
-        id,
+      const createContact = await contacts.addContact({
         name,
         email,
         phone,
       });
-      return createContact;
+      returnconsole.table(createContact);
 
     case "remove":
-      const removeContact = await Contacts.removeContact(id);
-      return removeContact;
+      const removeContact = await contacts.removeContact(id);
+      return console.table(removeContact);
 
     default:
       console.warn("\x1B[31m Unknown action type!");
